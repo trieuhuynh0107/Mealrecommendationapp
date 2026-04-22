@@ -1,0 +1,111 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="#F5EFEA">
+
+    <!-- Progress -->
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#E0E0E0"
+        android:progress="30"
+        android:progressTint="#F4C542" />
+
+    <!-- Header -->
+
+    <!-- Options -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="logo"
+            android:src="@drawable/img_food_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:text="@string/gender_question"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!-- Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Female -->
+        <LinearLayout
+            android:id="@+id/btnFemale"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_input"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="♀"
+                android:textColor="#E91E63"
+                android:textSize="40sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Male -->
+        <LinearLayout
+            android:id="@+id/btnMale"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/bg_input"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="♂"
+                android:textColor="#2196F3"
+                android:textSize="40sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginBottom="30dp"
+        android:text="@string/next"
+        android:background="@drawable/bg_button_green"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

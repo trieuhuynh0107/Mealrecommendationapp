@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="Base.Theme.MealRecommendationApp" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+
+    <style name="Theme.MealRecommendationApp" parent="Base.Theme.MealRecommendationApp">
+        <item name="materialButtonStyle">@style/MyButton</item>
+    </style>
+
+    <style name="MyButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="strokeColor">@null</item>
+        <item name="rippleColor">@null</item>
+    </style>
+
+</resources>
