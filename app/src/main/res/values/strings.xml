@@ -9,4 +9,36 @@
         <string name="day">DAY</string>
         <string name="month">MONTH</string>
         <string name="year">YEAR</string>
+        <string name="height_format">%1$d Cm</string>
+        <string name="weight_format">%1$d Kg</string>
+        <string name="username_placeholder">User</string>
+        <string name="user_icon">User icon</string>
+        <string name="calories">Calories</string>
+
+        <string name="calo_default">0 Kcal</string>
+        <string name="calo_target_default">of 0 kcal</string>
+
+        <string name="protein_default">Protein\n0/0g</string>
+        <string name="fat_default">Fats\n0/0g</string>
+        <string name="carb_default">Carbs\n0/0g</string>
+
+        <string name="recent">Recently</string>
+        <string name="no_history">No history</string>
+        <string name="app_logo">App logo</string>
+
+    <string name="menu">Menu</string>
+    <string name="profile">Profile</string>
+    <string name="todays_meals">Today\'s Meals</string>
+
+    <!-- Macros -->
+    <string name="protein">Protein</string>
+    <string name="fats">Fats</string>
+    <string name="carbs">Carbs</string>
+
+    <!-- Days of week -->
+    <string name="day_m">M</string>
+    <string name="day_t">T</string>
+    <string name="day_w">W</string>
+    <string name="day_f">F</string>
+    <string name="day_s">S</string>
 </resources>

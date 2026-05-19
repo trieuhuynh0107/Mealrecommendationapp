@@ -14,12 +14,11 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="50dp"
         android:backgroundTint="#E0E0E0"
-        android:progress="30"
+        android:progress="35"
         android:progressTint="#F4C542" />
 
     <!-- Header -->
 
-    <!-- Options -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="76dp"

@@ -13,7 +13,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="10dp"
-        android:progress="60"
+        android:progress="70"
         android:progressTint="#F4C542"
         android:backgroundTint="#E0E0E0" />
 
@@ -51,8 +51,8 @@
 
         <!-- DAY -->
         <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="110dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:gravity="center"
@@ -61,19 +61,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="@string/day"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <NumberPicker
                 android:id="@+id/pickerDay"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
         </LinearLayout>
 
         <!-- MONTH -->
         <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="110dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:gravity="center"
@@ -82,19 +84,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="@string/month"
                 android:textStyle="bold"/>
 
             <NumberPicker
                 android:id="@+id/pickerMonth"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
         </LinearLayout>
 
         <!-- YEAR -->
         <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="110dp"
+            android:layout_height="170dp"
             android:orientation="vertical"
             android:gravity="center"
             android:background="@drawable/bg_input">
@@ -102,13 +106,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="@string/year"
                 android:textStyle="bold"/>
 
             <NumberPicker
                 android:id="@+id/pickerYear"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -11,19 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MealRecommendationApp">
-        <!-- Welcome -->
+
+        <!-- Welcome Activity (Launcher) -->
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <!-- Login -->
+
+        <!-- Auth -->
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="false" />
@@ -32,9 +32,48 @@
             android:name=".ui.auth.RegisterActivity"
             android:exported="false" />
 
+        <!-- Survey -->
         <activity
             android:name=".ui.survey.SurveyGenderActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.survey.SurveyBirthActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.survey.SurveyHeightWeightActivity"
+            android:exported="false" />
+
+        <!-- Home Activity -->
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="false" />
+
+        <!--Meal Planner -->
+        <activity
+            android:name=".ui.home.MealPlannerActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.survey.SurveyCuisineActivity"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".ui.survey.SurveyAllergyActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.survey.SurveyHealthActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.home.RecommendationActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.home.ProfileActivity"/>
 
     </application>
 

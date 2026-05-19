@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F2EF">
+
+    <!-- SCROLL CONTENT -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="26dp"
+            android:paddingTop="34dp">
+
+            <!-- TOP -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/img_food_logo"/>
+
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:max="100"
+                    android:progress="75"
+                    android:progressTint="#F2C129"
+                    android:progressBackgroundTint="#ECECEC"/>
+
+            </LinearLayout>
+
+            <!-- QUESTION -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:layout_marginTop="34dp"
+                android:background="@drawable/bg_survey_option"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Any food allergies?"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <!-- TAGS -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="26dp">
+
+                <!-- ROW 1 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/optionPeanut"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="peanut"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionMilk"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="milk"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionEgg"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="egg"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                </LinearLayout>
+
+                <!-- ROW 2 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp">
+
+                    <TextView
+                        android:id="@+id/optionSoy"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="soy"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionWheat"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="wheat"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionSesame"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="sesame"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                </LinearLayout>
+
+                <!-- ROW 3 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp">
+
+                    <TextView
+                        android:id="@+id/optionFish"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="fish"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionShrimp"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="shrimp"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                    <TextView
+                        android:id="@+id/optionCrab"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="crab"
+                        android:textSize="15sp"
+                        android:textColor="#222222"
+                        android:gravity="center"
+                        android:background="@drawable/bg_input"/>
+
+                </LinearLayout>
+
+                <!-- NONE -->
+
+                <TextView
+                    android:id="@+id/optionNone"
+                    android:layout_width="120dp"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="14dp"
+                    android:text="None of them"
+                    android:textSize="15sp"
+                    android:textColor="#222222"
+                    android:gravity="center"
+                    android:background="@drawable/bg_input"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- FIXED NEXT BUTTON -->
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="26dp"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_button_green"/>
+
+</LinearLayout>
