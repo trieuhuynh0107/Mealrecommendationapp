@@ -408,7 +408,7 @@ public class MealPlannerActivity extends AppCompatActivity {
 
     private void loadRecommendations(RecyclerView recyclerView, BottomSheetDialog dialog) {
         String dateStr = getDateOfIndex(selectedDayIndex);
-        ApiClient.getService(this).getRecommendations(dateStr)
+        ApiClient.getService(this).getRecommendations(dateStr, null)
                 .enqueue(new Callback<ApiService.ApiResponse<List<FoodItem>>>() {
                     @Override
                     public void onResponse(Call<ApiService.ApiResponse<List<FoodItem>>> call, Response<ApiService.ApiResponse<List<FoodItem>>> response) {

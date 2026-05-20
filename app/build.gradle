@@ -55,6 +55,9 @@ dependencies {
     implementation libs.okhttp
     implementation libs.okhttp.logging.interceptor
     implementation libs.gson
+    
+    // Flexbox Layout
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

@@ -70,157 +70,16 @@
 
             <!-- TAGS -->
 
-            <LinearLayout
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexboxAllergies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="26dp">
-
-                <!-- ROW 1 -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/optionPeanut"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:text="peanut"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionMilk"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="milk"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionEgg"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="egg"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                </LinearLayout>
-
-                <!-- ROW 2 -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp">
-
-                    <TextView
-                        android:id="@+id/optionSoy"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:text="soy"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionWheat"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="wheat"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionSesame"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="sesame"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                </LinearLayout>
-
-                <!-- ROW 3 -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp">
-
-                    <TextView
-                        android:id="@+id/optionFish"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:text="fish"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionShrimp"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="shrimp"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                    <TextView
-                        android:id="@+id/optionCrab"
-                        android:layout_width="0dp"
-                        android:layout_height="44dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="10dp"
-                        android:text="crab"
-                        android:textSize="15sp"
-                        android:textColor="#222222"
-                        android:gravity="center"
-                        android:background="@drawable/bg_input"/>
-
-                </LinearLayout>
-
-                <!-- NONE -->
-
-                <TextView
-                    android:id="@+id/optionNone"
-                    android:layout_width="120dp"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="14dp"
-                    android:text="None of them"
-                    android:textSize="15sp"
-                    android:textColor="#222222"
-                    android:gravity="center"
-                    android:background="@drawable/bg_input"/>
-
-            </LinearLayout>
+                android:layout_marginTop="26dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:alignItems="stretch"
+                app:alignContent="stretch"/>
 
         </LinearLayout>
 

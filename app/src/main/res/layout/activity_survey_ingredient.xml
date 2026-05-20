@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F2EF">
+
+    <!-- SCROLL CONTENT -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="26dp"
+            android:paddingTop="34dp"
+            android:paddingBottom="16dp">
+
+            <!-- TOP -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:src="@drawable/img_food_logo"/>
+
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_height="6dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:max="100"
+                    android:progress="95"
+                    android:progressTint="#F2C129"
+                    android:progressBackgroundTint="#ECECEC"/>
+
+            </LinearLayout>
+
+            <!-- QUESTION BOX -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="34dp"
+                android:background="@drawable/bg_survey_option"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="What ingredients do you have on hand?"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <!-- CUSTOM INPUT BLOCK -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/edtCustomIngredient"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="Type custom ingredient..."
+                    android:textSize="15sp"
+                    android:paddingHorizontal="16dp"
+                    android:background="@drawable/bg_input"
+                    android:textColor="#222222"
+                    android:maxLines="1"
+                    android:inputType="textPersonName"/>
+
+                <Button
+                    android:id="@+id/btnAddIngredient"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:text="Add"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_green"/>
+
+            </LinearLayout>
+
+            <!-- SELECTED SUBTITLE -->
+            <TextView
+                android:id="@+id/txtSelectedHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Selected Ingredients:"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#555555"
+                android:visibility="gone"/>
+
+            <!-- SELECTED CHIPS CONTAINER -->
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexboxSelectedIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:alignItems="stretch"
+                app:alignContent="stretch"/>
+
+            <!-- POPULAR SUBTITLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Popular Choices:"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#555555"/>
+
+            <!-- POPULAR CHIPS CONTAINER -->
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexboxPopularIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:alignItems="stretch"
+                app:alignContent="stretch"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- FIXED RECOMMEND BUTTON -->
+    <Button
+        android:id="@+id/btnGetRecommendations"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginHorizontal="26dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="26dp"
+        android:text="Get Recommendations"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_button_green"/>
+
+</LinearLayout>

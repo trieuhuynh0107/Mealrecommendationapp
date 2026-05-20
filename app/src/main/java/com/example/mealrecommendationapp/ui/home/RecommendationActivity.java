@@ -30,6 +30,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
     private String selectedTime;
     private int selectedDayIndex;
+    private ArrayList<String> selectedIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
         selectedTime = getIntent().getStringExtra("selected_time");
         selectedDayIndex = getIntent().getIntExtra("selected_day", 0);
+        selectedIngredients = getIntent().getStringArrayListExtra("selected_ingredients");
 
         initViews();
         setupRecycler();
@@ -63,8 +65,20 @@ public class RecommendationActivity extends AppCompatActivity {
 
         String dateStr = getDateOfIndex(selectedDayIndex);
 
-        // Fetch dynamic recommended foods from backend API
-        ApiClient.getService(this).getRecommendations(dateStr)
+        String ingredientsCsv = null;
+        if (selectedIngredients != null && !selectedIngredients.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < selectedIngredients.size(); i++) {
+                sb.append(selectedIngredients.get(i));
+                if (i < selectedIngredients.size() - 1) {
+                    sb.append(",");
+                }
+            }
+            ingredientsCsv = sb.toString();
+        }
+
+        // Fetch dynamic recommended foods from backend API with selected ingredients
+        ApiClient.getService(this).getRecommendations(dateStr, ingredientsCsv)
                 .enqueue(new Callback<ApiService.ApiResponse<List<FoodItem>>>() {
                     @Override
                     public void onResponse(Call<ApiService.ApiResponse<List<FoodItem>>> call, Response<ApiService.ApiResponse<List<FoodItem>>> response) {

@@ -72,6 +72,10 @@
             android:exported="false"/>
 
         <activity
+            android:name=".ui.survey.SurveyIngredientActivity"
+            android:exported="false"/>
+
+        <activity
             android:name=".ui.home.RecommendationActivity"
             android:exported="false"/>
 

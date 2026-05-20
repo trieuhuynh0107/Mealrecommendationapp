@@ -80,9 +80,13 @@ public interface ApiService {
 
     // ==================== RECOMMEND ====================
 
+    @GET("/metadata/recommend-options")
+    Call<ApiResponse<RecommendOptionsResponse>> getRecommendOptions();
+
     @GET("/recommend")
     Call<ApiResponse<List<FoodItem>>> getRecommendations(
-            @Query("date") String date
+            @Query("date") String date,
+            @Query("ingredients") String ingredients
     );
 
     // ==================== DTO CLASSES ====================
@@ -325,5 +329,19 @@ public interface ApiService {
         public double getProtein() { return protein; }
         public double getCarbs() { return carbs; }
         public double getFat() { return fat; }
+    }
+
+    class RecommendOptionsResponse {
+        private int version;
+        private List<String> cuisines;
+        private List<String> allergies;
+        private List<String> dietTags;
+        private List<String> popularIngredients;
+
+        public int getVersion() { return version; }
+        public List<String> getCuisines() { return cuisines; }
+        public List<String> getAllergies() { return allergies; }
+        public List<String> getDietTags() { return dietTags; }
+        public List<String> getPopularIngredients() { return popularIngredients; }
     }
 }

@@ -68,86 +68,16 @@
 
             <!-- OPTIONS -->
 
-            <LinearLayout
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexboxCuisines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="22dp">
-
-                <!-- SELECTED -->
-
-                <TextView
-                    android:id="@+id/optionVietnamese"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="Vietnamese"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
-                    android:id="@+id/optionAmerican"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="American"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
-                    android:id="@+id/optionItalian"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="Italian"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
-                    android:id="@+id/optionThai"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="Thai"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
-                    android:id="@+id/optionKorean"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="Korean"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"
-                    android:layout_marginBottom="10dp"/>
-
-                <TextView
-                    android:id="@+id/optionChinese"
-                    android:layout_width="match_parent"
-                    android:layout_height="58dp"
-                    android:text="Chinese"
-                    android:textColor="#222222"
-                    android:textSize="17sp"
-                    android:gravity="start|center_vertical"
-                    android:paddingStart="18dp"
-                    android:background="@drawable/bg_input"/>
-
-            </LinearLayout>
+                android:layout_marginTop="22dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:alignItems="stretch"
+                app:alignContent="stretch"/>
 
         </LinearLayout>
 
