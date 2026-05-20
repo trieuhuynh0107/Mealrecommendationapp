@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mealrecommendationapp.R;
-import com.example.mealrecommendationapp.data.FakeUser;
 import com.example.mealrecommendationapp.data.network.ApiClient;
 import com.example.mealrecommendationapp.data.network.ApiService;
 import com.example.mealrecommendationapp.ui.custom.RulerView;
