@@ -13,8 +13,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="3"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <!-- TIME -->
 
@@ -34,11 +35,14 @@
             android:id="@+id/txtFoodName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="12dp"
             android:text=""
             android:textColor="#222222"
             android:textSize="15sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
     </LinearLayout>
 

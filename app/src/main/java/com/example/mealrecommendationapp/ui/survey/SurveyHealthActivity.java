@@ -100,24 +100,49 @@ public class SurveyHealthActivity
     private void setupNext() {
 
         btnNext.setOnClickListener(v -> {
+            btnNext.setEnabled(false);
+            btnNext.setText("Saving Preferences...");
 
-            Intent intent =
-                    new Intent(
-                            this,
-                            RecommendationActivity.class
-                    );
+            ArrayList<String> selectedCuisines = getIntent().getStringArrayListExtra("selected_cuisines");
+            ArrayList<String> selectedAllergies = getIntent().getStringArrayListExtra("selected_allergies");
 
-            intent.putExtra(
-                    "selected_time",
-                    selectedTime
-            );
+            ArrayList<String> selectedDietTags = new ArrayList<>();
+            for (TextView option : options) {
+                if (option.isSelected()) {
+                    String tag = option.getText().toString();
+                    if (!"None of them".equalsIgnoreCase(tag)) {
+                        selectedDietTags.add(tag);
+                    }
+                }
+            }
 
-            intent.putExtra(
-                    "selected_day",
-                    selectedDayIndex
-            );
+            // Call profile update API to save selections on the backend
+            com.example.mealrecommendationapp.data.network.ApiClient.getService(this)
+                    .updateProfile(new com.example.mealrecommendationapp.data.network.ApiService.UpdateProfileRequest(
+                            selectedCuisines != null ? selectedCuisines : new ArrayList<>(),
+                            selectedAllergies != null ? selectedAllergies : new ArrayList<>(),
+                            selectedDietTags
+                    ))
+                    .enqueue(new retrofit2.Callback<com.example.mealrecommendationapp.data.network.ApiService.ApiResponse<com.example.mealrecommendationapp.data.network.ApiService.ProfileData>>() {
+                        @Override
+                        public void onResponse(retrofit2.Call<com.example.mealrecommendationapp.data.network.ApiService.ApiResponse<com.example.mealrecommendationapp.data.network.ApiService.ProfileData>> call,
+                                               retrofit2.Response<com.example.mealrecommendationapp.data.network.ApiService.ApiResponse<com.example.mealrecommendationapp.data.network.ApiService.ProfileData>> response) {
+                            navigateToRecommendations();
+                        }
 
-            startActivity(intent);
+                        @Override
+                        public void onFailure(retrofit2.Call<com.example.mealrecommendationapp.data.network.ApiService.ApiResponse<com.example.mealrecommendationapp.data.network.ApiService.ProfileData>> call, Throwable t) {
+                            navigateToRecommendations();
+                        }
+                    });
         });
+    }
+
+    private void navigateToRecommendations() {
+        Intent intent = new Intent(this, RecommendationActivity.class);
+        intent.putExtra("selected_time", selectedTime);
+        intent.putExtra("selected_day", selectedDayIndex);
+        startActivity(intent);
+        finish();
     }
 }

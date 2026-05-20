@@ -20,14 +20,6 @@
         android:drawableStart="@android:drawable/ic_menu_search"
         android:drawablePadding="10dp"/>
 
-    <!-- LIST -->
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerSearchFood"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="20dp"/>
-
     <!-- BUTTON -->
 
     <Button
@@ -39,7 +31,15 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_button_yellow"/>
+
+    <!-- LIST -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSearchFood"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

@@ -113,6 +113,20 @@ public class SurveyAllergyActivity
                     selectedDayIndex
             );
 
+            ArrayList<String> selectedCuisines = getIntent().getStringArrayListExtra("selected_cuisines");
+            intent.putStringArrayListExtra("selected_cuisines", selectedCuisines);
+
+            ArrayList<String> selectedAllergies = new ArrayList<>();
+            for (TextView option : options) {
+                if (option.isSelected()) {
+                    String allergy = option.getText().toString();
+                    if (!"None of them".equalsIgnoreCase(allergy)) {
+                        selectedAllergies.add(allergy);
+                    }
+                }
+            }
+            intent.putStringArrayListExtra("selected_allergies", selectedAllergies);
+
             startActivity(intent);
         });
     }

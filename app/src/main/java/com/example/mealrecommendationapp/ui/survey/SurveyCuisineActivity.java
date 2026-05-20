@@ -126,6 +126,14 @@ public class SurveyCuisineActivity
                     selectedDayIndex
             );
 
+            ArrayList<String> selectedCuisines = new ArrayList<>();
+            for (TextView option : options) {
+                if (option.isSelected()) {
+                    selectedCuisines.add(option.getText().toString());
+                }
+            }
+            intent.putStringArrayListExtra("selected_cuisines", selectedCuisines);
+
             startActivity(intent);
         });
     }

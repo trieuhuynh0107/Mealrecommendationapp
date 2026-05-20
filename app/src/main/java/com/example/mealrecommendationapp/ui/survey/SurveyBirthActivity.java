@@ -75,6 +75,10 @@ public class SurveyBirthActivity
 
             int birthYear =
                     year.getValue();
+            int birthMonth =
+                    month.getValue();
+            int birthDay =
+                    day.getValue();
 
             int currentYear =
                     Calendar.getInstance()
@@ -82,6 +86,8 @@ public class SurveyBirthActivity
 
             int age =
                     currentYear - birthYear;
+
+            String dateOfBirth = String.format(java.util.Locale.US, "%04d-%02d-%02d", birthYear, birthMonth, birthDay);
 
             Intent intent =
                     new Intent(
@@ -97,6 +103,11 @@ public class SurveyBirthActivity
             intent.putExtra(
                     "age",
                     age
+            );
+
+            intent.putExtra(
+                    "dateOfBirth",
+                    dateOfBirth
             );
 
             startActivity(intent);

@@ -10,8 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mealrecommendationapp.R;
 import com.example.mealrecommendationapp.data.FakeUser;
+import com.example.mealrecommendationapp.data.network.ApiClient;
+import com.example.mealrecommendationapp.data.network.ApiService;
 import com.example.mealrecommendationapp.ui.custom.RulerView;
 import com.example.mealrecommendationapp.ui.home.HomeActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SurveyHeightWeightActivity
         extends AppCompatActivity {
@@ -148,28 +154,59 @@ public class SurveyHeightWeightActivity
             int weight =
                     rulerWeight.getCurrentValue();
 
-            FakeUser.updateUser(
+            String dob = getIntent().getStringExtra("dateOfBirth");
+            if (dob == null) {
+                dob = "2000-01-01";
+            }
 
-                    "User",
+            btnNext.setEnabled(false);
+            btnNext.setText("Saving...");
 
-                    gender,
+            String finalGender = "male";
+            if (gender != null) {
+                finalGender = gender.toLowerCase();
+            }
 
-                    age,
-
+            java.util.List<String> emptyList = new java.util.ArrayList<>();
+            ApiService.OnboardingRequest req = new ApiService.OnboardingRequest(
+                    finalGender,
+                    dob,
+                    height,
                     weight,
-
-                    height
+                    emptyList,
+                    emptyList,
+                    emptyList
             );
 
-            Intent intent =
-                    new Intent(
-                            this,
-                            HomeActivity.class
-                    );
+            ApiClient.getService(this).onboarding(req)
+                    .enqueue(new Callback<ApiService.ApiResponse<ApiService.ProfileData>>() {
+                        @Override
+                        public void onResponse(Call<ApiService.ApiResponse<ApiService.ProfileData>> call,
+                                               Response<ApiService.ApiResponse<ApiService.ProfileData>> response) {
+                            btnNext.setEnabled(true);
+                            btnNext.setText("Next");
 
-            startActivity(intent);
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                Toast.makeText(SurveyHeightWeightActivity.this, "Onboarding hoàn thành!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(SurveyHeightWeightActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                String errorMsg = "Lỗi khi lưu thông tin";
+                                if (response.body() != null && response.body().getError() != null) {
+                                    errorMsg = response.body().getError().getMessage();
+                                }
+                                Toast.makeText(SurveyHeightWeightActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-            finish();
+                        @Override
+                        public void onFailure(Call<ApiService.ApiResponse<ApiService.ProfileData>> call, Throwable t) {
+                            btnNext.setEnabled(true);
+                            btnNext.setText("Next");
+                            Toast.makeText(SurveyHeightWeightActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
     }
 }
