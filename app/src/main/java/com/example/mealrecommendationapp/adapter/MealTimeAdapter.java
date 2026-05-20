@@ -17,20 +17,21 @@ import java.util.List;
 public class MealTimeAdapter
         extends RecyclerView.Adapter<MealTimeAdapter.ViewHolder> {
 
-    private List<TimeMeal> list;
+        private List<TimeMeal> list;
 
-    private OnAddClickListener listener;
+    private OnMealClickListener listener;
 
     // CLICK INTERFACE
 
-    public interface OnAddClickListener {
-
+    public interface OnMealClickListener {
         void onAddClick(String time);
+        void onDeleteClick(TimeMeal item);
+        void onEditClick(TimeMeal item);
     }
 
     public MealTimeAdapter(
             List<TimeMeal> list,
-            OnAddClickListener listener
+            OnMealClickListener listener
     ) {
 
         this.list = list;
@@ -76,27 +77,39 @@ public class MealTimeAdapter
                 item.getFoodItem();
 
         if (foodItem != null) {
-
+            String suffix = item.getQuantityG() != null ? " (" + item.getQuantityG() + "g)" : "";
             holder.txtFoodName.setText(
-                    foodItem.getName()
+                    foodItem.getName() + suffix
             );
+            holder.btnAdd.setText("x");
+            holder.btnAdd.setBackgroundResource(R.drawable.bg_button_red);
 
+            holder.btnAdd.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onDeleteClick(item);
+                }
+            });
+
+            holder.itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onEditClick(item);
+                }
+            });
         } else {
-
             holder.txtFoodName.setText("");
+            holder.btnAdd.setText("+");
+            holder.btnAdd.setBackgroundResource(R.drawable.bg_button_green);
+
+            holder.btnAdd.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onAddClick(
+                            item.getTime()
+                    );
+                }
+            });
+
+            holder.itemView.setOnClickListener(null);
         }
-
-        // ADD BUTTON
-
-        holder.btnAdd.setOnClickListener(v -> {
-
-            if (listener != null) {
-
-                listener.onAddClick(
-                        item.getTime()
-                );
-            }
-        });
     }
 
     @Override

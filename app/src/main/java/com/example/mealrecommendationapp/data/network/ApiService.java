@@ -1,41 +1,47 @@
 package com.example.mealrecommendationapp.data.network;
 
 import com.example.mealrecommendationapp.model.FoodItem;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PATCH;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
 
     // ==================== AUTH ====================
 
-    @POST("auth/register")
+    @POST("/auth/register")
     Call<ApiResponse<AuthData>> register(@Body RegisterRequest request);
 
-    @POST("auth/login")
+    @POST("/auth/login")
     Call<ApiResponse<AuthData>> login(@Body LoginRequest request);
 
-    @POST("auth/refresh")
+    @POST("/auth/refresh")
     Call<ApiResponse<AuthData>> refreshTokenSync(@Body RefreshRequest request);
+
+    @POST("/auth/logout")
+    Call<ApiResponse<Void>> logout();
 
     // ==================== USERS ====================
 
-    @GET("users/me")
+    @GET("/users/me")
     Call<ApiResponse<ProfileData>> getProfile();
 
-    @POST("users/onboarding")
+    @POST("/users/onboarding")
     Call<ApiResponse<ProfileData>> onboarding(@Body OnboardingRequest request);
 
-    @PATCH("users/me")
+    @PATCH("/users/me")
     Call<ApiResponse<ProfileData>> updateProfile(@Body UpdateProfileRequest request);
 
     // ==================== FOODS ====================
 
-    @GET("foods/search")
+    @GET("/foods/search")
     Call<ApiResponse<List<FoodItem>>> searchFoods(
             @Query("q") String query,
             @Query("page") int page,
@@ -44,26 +50,37 @@ public interface ApiService {
 
     // ==================== MEALS ====================
 
-    @GET("meals")
+    @GET("/meals")
     Call<ApiResponse<List<MealResponse>>> getMeals(
             @Query("date") String date
     );
 
-    @POST("meals")
+    @POST("/meals")
     Call<ApiResponse<MealResponse>> addMeal(
             @Body AddMealRequest request
     );
 
+    @PATCH("/meals/{id}")
+    Call<ApiResponse<MealResponse>> updateMeal(
+            @Path("id") String mealId,
+            @Body UpdateMealRequest request
+    );
+
+    @DELETE("/meals/{id}")
+    Call<Void> deleteMeal(
+            @Path("id") String mealId
+    );
+
     // ==================== SUMMARY ====================
 
-    @GET("summary/daily")
+    @GET("/summary/daily")
     Call<ApiResponse<SummaryData>> getDailySummary(
             @Query("date") String date
     );
 
     // ==================== RECOMMEND ====================
 
-    @GET("recommend")
+    @GET("/recommend")
     Call<ApiResponse<List<FoodItem>>> getRecommendations(
             @Query("date") String date
     );
@@ -133,27 +150,43 @@ public interface ApiService {
         private String name;
         private String email;
         private String gender;
-        private String date_of_birth;
-        private int height_cm;
-        private int weight_kg;
-        private double daily_calories;
-        private double daily_protein;
-        private double daily_carbs;
-        private double daily_fat;
-        private boolean is_onboarding_complete;
+
+        @SerializedName("date_of_birth")
+        private String dateOfBirth;
+
+        @SerializedName("height_cm")
+        private int heightCm;
+
+        @SerializedName("weight_kg")
+        private int weightKg;
+
+        @SerializedName("daily_calories")
+        private double dailyCalories;
+
+        @SerializedName("daily_protein")
+        private double dailyProtein;
+
+        @SerializedName("daily_carbs")
+        private double dailyCarbs;
+
+        @SerializedName("daily_fat")
+        private double dailyFat;
+
+        @SerializedName("is_onboarding_complete")
+        private boolean isOnboardingComplete;
 
         public String getId() { return id; }
         public String getName() { return name; }
         public String getEmail() { return email; }
         public String getGender() { return gender; }
-        public String getDateOfBirth() { return date_of_birth; }
-        public int getHeightCm() { return height_cm; }
-        public int getWeightKg() { return weight_kg; }
-        public double getDailyCalories() { return daily_calories; }
-        public double getDailyProtein() { return daily_protein; }
-        public double getDailyCarbs() { return daily_carbs; }
-        public double getDailyFat() { return daily_fat; }
-        public boolean isOnboardingComplete() { return is_onboarding_complete; }
+        public String getDateOfBirth() { return dateOfBirth; }
+        public int getHeightCm() { return heightCm; }
+        public int getWeightKg() { return weightKg; }
+        public double getDailyCalories() { return dailyCalories; }
+        public double getDailyProtein() { return dailyProtein; }
+        public double getDailyCarbs() { return dailyCarbs; }
+        public double getDailyFat() { return dailyFat; }
+        public boolean isOnboardingComplete() { return isOnboardingComplete; }
     }
 
     class OnboardingRequest {
@@ -214,28 +247,56 @@ public interface ApiService {
         }
     }
 
+    class UpdateMealRequest {
+        private String scheduledAt;
+        private Integer quantityG;
+
+        public UpdateMealRequest(String scheduledAt, Integer quantityG) {
+            this.scheduledAt = scheduledAt;
+            this.quantityG = quantityG;
+        }
+    }
+
     class MealResponse {
         private String id;
-        private String food_id;
-        private String scheduled_at;
-        private int quantity_g;
-        private double calories_snap;
-        private double protein_snap;
-        private double carbs_snap;
-        private double fat_snap;
-        private String food_name;
-        private String food_image_url;
+
+        @SerializedName("food_id")
+        private String foodId;
+
+        @SerializedName("scheduled_at")
+        private String scheduledAt;
+
+        @SerializedName("quantity_g")
+        private int quantityG;
+
+        @SerializedName("calories_snap")
+        private double caloriesSnap;
+
+        @SerializedName("protein_snap")
+        private double proteinSnap;
+
+        @SerializedName("carbs_snap")
+        private double carbsSnap;
+
+        @SerializedName("fat_snap")
+        private double fatSnap;
+
+        @SerializedName("food_name")
+        private String foodName;
+
+        @SerializedName("food_image_url")
+        private String foodImageUrl;
 
         public String getId() { return id; }
-        public String getFoodId() { return food_id; }
-        public String getScheduledAt() { return scheduled_at; }
-        public int getQuantityG() { return quantity_g; }
-        public double getCaloriesSnap() { return calories_snap; }
-        public double getProteinSnap() { return protein_snap; }
-        public double getCarbsSnap() { return carbs_snap; }
-        public double getFatSnap() { return fat_snap; }
-        public String getFoodName() { return food_name; }
-        public String getFoodImageUrl() { return food_image_url; }
+        public String getFoodId() { return foodId; }
+        public String getScheduledAt() { return scheduledAt; }
+        public int getQuantityG() { return quantityG; }
+        public double getCaloriesSnap() { return caloriesSnap; }
+        public double getProteinSnap() { return proteinSnap; }
+        public double getCarbsSnap() { return carbsSnap; }
+        public double getFatSnap() { return fatSnap; }
+        public String getFoodName() { return foodName; }
+        public String getFoodImageUrl() { return foodImageUrl; }
     }
 
     class SummaryData {

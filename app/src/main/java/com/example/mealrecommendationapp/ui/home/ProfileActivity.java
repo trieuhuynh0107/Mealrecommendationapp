@@ -160,11 +160,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnLogout.setOnClickListener(v -> {
-            SharedPreferencesHelper.clear(ProfileActivity.this);
-            Intent intent = new Intent(ProfileActivity.this, WelcomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            ApiClient.getService(ProfileActivity.this).logout().enqueue(new Callback<ApiService.ApiResponse<Void>>() {
+                @Override
+                public void onResponse(Call<ApiService.ApiResponse<Void>> call, Response<ApiService.ApiResponse<Void>> response) {
+                    proceedLogout();
+                }
+
+                @Override
+                public void onFailure(Call<ApiService.ApiResponse<Void>> call, Throwable t) {
+                    proceedLogout();
+                }
+            });
         });
+    }
+
+    private void proceedLogout() {
+        SharedPreferencesHelper.clear(ProfileActivity.this);
+        Intent intent = new Intent(ProfileActivity.this, WelcomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

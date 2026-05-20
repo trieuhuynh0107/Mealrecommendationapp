@@ -202,6 +202,8 @@ public class MealPlannerActivity extends AppCompatActivity {
                                             meal.getFoodImageUrl()
                                     );
                                     timeMeal.setFoodItem(foodItem);
+                                    timeMeal.setMealId(meal.getId());
+                                    timeMeal.setQuantityG(meal.getQuantityG());
                                     break;
                                 }
                             }
@@ -209,9 +211,22 @@ public class MealPlannerActivity extends AppCompatActivity {
                             timeline.add(timeMeal);
                         }
 
-                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, time -> {
-                            selectedTime = time;
-                            showFoodBottomSheet();
+                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, new MealTimeAdapter.OnMealClickListener() {
+                            @Override
+                            public void onAddClick(String time) {
+                                selectedTime = time;
+                                showFoodBottomSheet();
+                            }
+
+                            @Override
+                            public void onDeleteClick(TimeMeal item) {
+                                deleteMeal(item.getMealId());
+                            }
+
+                            @Override
+                            public void onEditClick(TimeMeal item) {
+                                showEditQuantityDialog(item);
+                            }
                         });
                         recyclerMealTime.setAdapter(adapter);
                     }
@@ -224,14 +239,97 @@ public class MealPlannerActivity extends AppCompatActivity {
                             String time = (hour < 10) ? "0" + hour + ":00" : hour + ":00";
                             timeline.add(new TimeMeal(selectedDayIndex, time));
                         }
-                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, time -> {
-                            selectedTime = time;
-                            showFoodBottomSheet();
+                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, new MealTimeAdapter.OnMealClickListener() {
+                            @Override
+                            public void onAddClick(String time) {
+                                selectedTime = time;
+                                showFoodBottomSheet();
+                            }
+
+                            @Override
+                            public void onDeleteClick(TimeMeal item) {}
+
+                            @Override
+                            public void onEditClick(TimeMeal item) {}
                         });
                         recyclerMealTime.setAdapter(adapter);
                     }
                 });
     }
+
+    private void deleteMeal(String mealId) {
+        if (mealId == null) return;
+        ApiClient.getService(this).deleteMeal(mealId)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(MealPlannerActivity.this, "Đã xóa món ăn!", Toast.LENGTH_SHORT).show();
+                            setupRecycler();
+                        } else {
+                            Toast.makeText(MealPlannerActivity.this, "Lỗi khi xóa món ăn", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(MealPlannerActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void showEditQuantityDialog(TimeMeal item) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Cập nhật số lượng");
+
+        final EditText input = new EditText(this);
+        input.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+        input.setText(String.valueOf(item.getQuantityG() != null ? item.getQuantityG() : 100));
+        input.setSelection(input.getText().length());
+        builder.setView(input);
+
+        builder.setPositiveButton("Lưu", (dialog, which) -> {
+            String val = input.getText().toString().trim();
+            if (!val.isEmpty()) {
+                try {
+                    int quantity = Integer.parseInt(val);
+                    if (quantity <= 0) {
+                        Toast.makeText(this, "Số lượng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    updateMealQuantity(item.getMealId(), quantity);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(this, "Số lượng không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    private void updateMealQuantity(String mealId, int quantity) {
+        if (mealId == null) return;
+        ApiService.UpdateMealRequest req = new ApiService.UpdateMealRequest(null, quantity);
+        ApiClient.getService(this).updateMeal(mealId, req)
+                .enqueue(new Callback<ApiService.ApiResponse<ApiService.MealResponse>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Response<ApiService.ApiResponse<ApiService.MealResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                            Toast.makeText(MealPlannerActivity.this, "Cập nhật số lượng thành công!", Toast.LENGTH_SHORT).show();
+                            setupRecycler();
+                        } else {
+                            Toast.makeText(MealPlannerActivity.this, "Lỗi khi cập nhật", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Throwable t) {
+                        Toast.makeText(MealPlannerActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     private void setupBottomNav() {
         btnHome.setOnClickListener(v -> {
