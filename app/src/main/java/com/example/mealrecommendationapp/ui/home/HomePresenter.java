@@ -61,6 +61,7 @@ public class HomePresenter {
                             (int) meal.getCarbsSnap(),
                             meal.getFoodImageUrl()
                     );
+                    item.setQuantityG(meal.getQuantityG());
                     foodList.add(item);
                 }
                 view.onMealsLoaded(foodList);

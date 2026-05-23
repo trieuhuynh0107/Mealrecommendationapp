@@ -15,6 +15,8 @@ import com.example.mealrecommendationapp.data.RepositoryCallback;
 import com.example.mealrecommendationapp.databinding.ActivityFoodDetailBinding;
 import com.example.mealrecommendationapp.model.FoodItem;
 import com.google.android.flexbox.FlexboxLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 public class FoodDetailActivity extends AppCompatActivity {
 
@@ -23,6 +25,9 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     private String foodId;
     private String scheduledAt;
+
+    private FoodItem currentFood;
+    private int currentPortion = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     }
 
     private void bindFoodData(FoodItem food) {
+        this.currentFood = food;
+
         // Name & translation if available
         String name = food.getName();
         if (food.getNameVi() != null && !food.getNameVi().isEmpty()) {
@@ -82,11 +89,8 @@ public class FoodDetailActivity extends AppCompatActivity {
         }
         binding.txtFoodName.setText(name);
 
-        // Nutrition numbers
-        binding.txtValKcal.setText((int) food.getCalories() + " Kcal");
-        binding.txtValCarbs.setText((int) food.getCarbs() + "g");
-        binding.txtValProtein.setText((int) food.getProtein() + "g");
-        binding.txtValFats.setText((int) food.getFats() + "g");
+        // Nutrition numbers scaled by current portion
+        updateNutritionDisplay();
 
         // Dynamic ingredients loading logic
         displayIngredients(food.getIngredients());
@@ -94,6 +98,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         // Setup bottom action bar adding mechanism
         if (scheduledAt != null && !scheduledAt.isEmpty()) {
             binding.bottomActionBar.setVisibility(View.VISIBLE);
+            setupPortionSelector();
             binding.btnAddToPlan.setOnClickListener(v -> addMealToPlanner(food.getId()));
         } else {
             binding.bottomActionBar.setVisibility(View.GONE);
@@ -170,9 +175,72 @@ public class FoodDetailActivity extends AppCompatActivity {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
+    private void setupPortionSelector() {
+        binding.btnMinus.setOnClickListener(v -> {
+            if (currentPortion > 10) {
+                currentPortion -= 10;
+                binding.edtPortion.setText(String.valueOf(currentPortion));
+                updateNutritionDisplay();
+            }
+        });
+
+        binding.btnPlus.setOnClickListener(v -> {
+            if (currentPortion < 2000) {
+                currentPortion += 10;
+                binding.edtPortion.setText(String.valueOf(currentPortion));
+                updateNutritionDisplay();
+            }
+        });
+
+        binding.edtPortion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String val = s.toString().trim();
+                if (!val.isEmpty()) {
+                    try {
+                        int valInt = Integer.parseInt(val);
+                        if (valInt > 0) {
+                            currentPortion = valInt;
+                            updateNutritionDisplay();
+                        }
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+        });
+    }
+
+    private void updateNutritionDisplay() {
+        if (currentFood == null) return;
+        double factor = currentPortion / 100.0;
+        binding.txtValKcal.setText((int) (currentFood.getCalories() * factor) + " Kcal");
+        binding.txtValCarbs.setText((int) (currentFood.getCarbs() * factor) + "g");
+        binding.txtValProtein.setText((int) (currentFood.getProtein() * factor) + "g");
+        binding.txtValFats.setText((int) (currentFood.getFats() * factor) + "g");
+        binding.txtPerWeight.setText("Khẩu phần: " + currentPortion + "g");
+    }
+
     private void addMealToPlanner(String targetFoodId) {
+        String portionStr = binding.edtPortion.getText().toString().trim();
+        try {
+            int portion = Integer.parseInt(portionStr);
+            if (portion <= 0) {
+                Toast.makeText(this, "Khẩu phần phải lớn hơn 0g", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            currentPortion = portion;
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Vui lòng nhập số khẩu phần hợp lệ!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         binding.btnAddToPlan.setEnabled(false);
-        mealRepository.addMeal(this, targetFoodId, scheduledAt, 100, new RepositoryCallback<com.example.mealrecommendationapp.data.network.ApiService.MealResponse>() {
+        mealRepository.addMeal(this, targetFoodId, scheduledAt, currentPortion, new RepositoryCallback<com.example.mealrecommendationapp.data.network.ApiService.MealResponse>() {
             @Override
             public void onSuccess(com.example.mealrecommendationapp.data.network.ApiService.MealResponse data) {
                 Toast.makeText(FoodDetailActivity.this, "Đã thêm món ăn vào thực đơn!", Toast.LENGTH_SHORT).show();

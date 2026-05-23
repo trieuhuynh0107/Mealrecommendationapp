@@ -24,6 +24,7 @@ public class FoodItem implements Serializable {
     private double fiber;
     private double sugar;
     private double sodium;
+    private Integer quantityG;
 
     public FoodItem(
             String name,
@@ -131,5 +132,13 @@ public class FoodItem implements Serializable {
 
     public void setSodium(double sodium) {
         this.sodium = sodium;
+    }
+
+    public Integer getQuantityG() {
+        return quantityG;
+    }
+
+    public void setQuantityG(Integer quantityG) {
+        this.quantityG = quantityG;
     }
 }

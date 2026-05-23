@@ -69,9 +69,15 @@ public class FoodAdapter
                 item.getName()
         );
 
-        holder.txtCalories.setText(
-                item.getCalories() + " kcal -100g"
-        );
+        if (item.getQuantityG() != null) {
+            holder.txtCalories.setText(
+                    (int) item.getCalories() + " kcal - " + item.getQuantityG() + "g"
+            );
+        } else {
+            holder.txtCalories.setText(
+                    (int) item.getCalories() + " kcal - 100g"
+            );
+        }
 
         holder.txtProtein.setText(
                 item.getProtein() + "g"
