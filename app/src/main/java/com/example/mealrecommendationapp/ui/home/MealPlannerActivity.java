@@ -1,74 +1,45 @@
 package com.example.mealrecommendationapp.ui.home;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.mealrecommendationapp.R;
-import com.example.mealrecommendationapp.adapter.FoodAdapter;
 import com.example.mealrecommendationapp.adapter.MealTimeAdapter;
-import com.example.mealrecommendationapp.data.network.ApiClient;
-import com.example.mealrecommendationapp.data.network.ApiService;
+import com.example.mealrecommendationapp.databinding.ActivityMealPlannerBinding;
 import com.example.mealrecommendationapp.model.FoodItem;
 import com.example.mealrecommendationapp.model.TimeMeal;
+import com.example.mealrecommendationapp.ui.custom.FoodSearchBottomSheetDialog;
 import com.example.mealrecommendationapp.ui.survey.SurveyCuisineActivity;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+public class MealPlannerActivity extends AppCompatActivity implements MealPlannerView, FoodSearchBottomSheetDialog.OnFoodSelectedListener {
 
-public class MealPlannerActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerMealTime;
-
-    private TextView btnHome;
-    private TextView btnMenu;
-
-    private TextView btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun;
+    private ActivityMealPlannerBinding binding;
+    private MealPlannerPresenter presenter;
 
     private int selectedDayIndex = 0;
     private String selectedTime = "09:00";
+    private FoodSearchBottomSheetDialog searchDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meal_planner);
+        binding = ActivityMealPlannerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        initViews();
+        presenter = new MealPlannerPresenter(this);
+
         setupDays();
         setupBottomNav();
         setupClicks();
         setupRecycler();
-    }
-
-    private void initViews() {
-        recyclerMealTime = findViewById(R.id.recyclerMealTime);
-        btnHome = findViewById(R.id.btnHome);
-        btnMenu = findViewById(R.id.btnMenu);
-
-        btnMon = findViewById(R.id.dayMon);
-        btnTue = findViewById(R.id.dayTue);
-        btnWed = findViewById(R.id.dayWed);
-        btnThu = findViewById(R.id.dayThu);
-        btnFri = findViewById(R.id.dayFri);
-        btnSat = findViewById(R.id.daySat);
-        btnSun = findViewById(R.id.daySun);
     }
 
     private void setupDays() {
@@ -83,13 +54,13 @@ public class MealPlannerActivity extends AppCompatActivity {
 
         updateTabs(selectedDayIndex);
 
-        btnMon.setOnClickListener(v -> handleTabClick(0));
-        btnTue.setOnClickListener(v -> handleTabClick(1));
-        btnWed.setOnClickListener(v -> handleTabClick(2));
-        btnThu.setOnClickListener(v -> handleTabClick(3));
-        btnFri.setOnClickListener(v -> handleTabClick(4));
-        btnSat.setOnClickListener(v -> handleTabClick(5));
-        btnSun.setOnClickListener(v -> handleTabClick(6));
+        binding.dayMon.setOnClickListener(v -> handleTabClick(0));
+        binding.dayTue.setOnClickListener(v -> handleTabClick(1));
+        binding.dayWed.setOnClickListener(v -> handleTabClick(2));
+        binding.dayThu.setOnClickListener(v -> handleTabClick(3));
+        binding.dayFri.setOnClickListener(v -> handleTabClick(4));
+        binding.daySat.setOnClickListener(v -> handleTabClick(5));
+        binding.daySun.setOnClickListener(v -> handleTabClick(6));
     }
 
     private void handleTabClick(int index) {
@@ -102,184 +73,121 @@ public class MealPlannerActivity extends AppCompatActivity {
         resetTabColors();
 
         switch (index) {
-            case 0: setTabActive(btnMon); break;
-            case 1: setTabActive(btnTue); break;
-            case 2: setTabActive(btnWed); break;
-            case 3: setTabActive(btnThu); break;
-            case 4: setTabActive(btnFri); break;
-            case 5: setTabActive(btnSat); break;
-            case 6: setTabActive(btnSun); break;
+            case 0: setTabActive(binding.dayMon); break;
+            case 1: setTabActive(binding.dayTue); break;
+            case 2: setTabActive(binding.dayWed); break;
+            case 3: setTabActive(binding.dayThu); break;
+            case 4: setTabActive(binding.dayFri); break;
+            case 5: setTabActive(binding.daySat); break;
+            case 6: setTabActive(binding.daySun); break;
         }
     }
 
     private void resetTabColors() {
-        TextView[] tabs = {btnMon, btnTue, btnWed, btnThu, btnFri, btnSat, btnSun};
+        TextView[] tabs = {binding.dayMon, binding.dayTue, binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat, binding.daySun};
         for (TextView tab : tabs) {
             tab.setBackgroundResource(0);
-            tab.setTextColor(android.graphics.Color.parseColor("#666666"));
+            tab.setTextColor(Color.parseColor("#666666"));
         }
     }
 
     private void setTabActive(TextView selected) {
         selected.setBackgroundResource(R.drawable.bg_button_yellow);
-        selected.setTextColor(getResources().getColor(android.R.color.black));
-    }
-
-    private String getDateOfIndex(int dayIndex) {
-        Calendar cal = Calendar.getInstance();
-        int today = cal.get(Calendar.DAY_OF_WEEK);
-        int currentDayIndex = (today == Calendar.SUNDAY) ? 6 : today - 2;
-        int diff = dayIndex - currentDayIndex;
-        cal.add(Calendar.DAY_OF_YEAR, diff);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        return sdf.format(cal.getTime());
-    }
-
-    private boolean isHourMatch(String scheduledAt, String time) {
-        if (scheduledAt == null) return false;
-        try {
-            String cleaned = scheduledAt.replace("T", " ");
-            if (cleaned.endsWith("Z")) {
-                cleaned = cleaned.substring(0, cleaned.length() - 1);
-            }
-            if (cleaned.contains(".")) {
-                cleaned = cleaned.split("\\.")[0];
-            }
-            
-            java.text.SimpleDateFormat parser = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-            if (scheduledAt.contains("Z") || scheduledAt.contains("T")) {
-                parser.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
-            } else {
-                parser.setTimeZone(java.util.TimeZone.getDefault());
-            }
-            
-            java.util.Date date = parser.parse(cleaned);
-            if (date == null) return false;
-            
-            java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("HH:mm", Locale.US);
-            formatter.setTimeZone(java.util.TimeZone.getDefault());
-            String localHourMin = formatter.format(date);
-            
-            return localHourMin.equals(time);
-        } catch (Exception e) {
-            return false;
-        }
+        selected.setTextColor(Color.BLACK);
     }
 
     private void setupRecycler() {
-        recyclerMealTime.setLayoutManager(new LinearLayoutManager(this));
-
-        String dateStr = getDateOfIndex(selectedDayIndex);
-
-        // Fetch meals from backend API
-        ApiClient.getService(this).getMeals(dateStr)
-                .enqueue(new Callback<ApiService.ApiResponse<List<ApiService.MealResponse>>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<List<ApiService.MealResponse>>> call,
-                                           Response<ApiService.ApiResponse<List<ApiService.MealResponse>>> response) {
-                        List<ApiService.MealResponse> mealsList = new ArrayList<>();
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            mealsList = response.body().getData();
-                        }
-
-                        List<TimeMeal> timeline = new ArrayList<>();
-                        for (int hour = 9; hour <= 21; hour++) {
-                            String time = (hour < 10) ? "0" + hour + ":00" : hour + ":00";
-
-                            TimeMeal timeMeal = new TimeMeal(selectedDayIndex, time);
-
-                            // Search for a matching meal inside the API response
-                            for (ApiService.MealResponse meal : mealsList) {
-                                if (isHourMatch(meal.getScheduledAt(), time)) {
-                                    FoodItem foodItem = new FoodItem(
-                                            meal.getFoodId(),
-                                            meal.getFoodName(),
-                                            (int) meal.getCaloriesSnap(),
-                                            (int) meal.getProteinSnap(),
-                                            (int) meal.getFatSnap(),
-                                            (int) meal.getCarbsSnap(),
-                                            meal.getFoodImageUrl()
-                                    );
-                                    timeMeal.setFoodItem(foodItem);
-                                    timeMeal.setMealId(meal.getId());
-                                    timeMeal.setQuantityG(meal.getQuantityG());
-                                    break;
-                                }
-                            }
-
-                            timeline.add(timeMeal);
-                        }
-
-                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, new MealTimeAdapter.OnMealClickListener() {
-                            @Override
-                            public void onAddClick(String time) {
-                                selectedTime = time;
-                                showFoodBottomSheet();
-                            }
-
-                            @Override
-                            public void onDeleteClick(TimeMeal item) {
-                                deleteMeal(item.getMealId());
-                            }
-
-                            @Override
-                            public void onEditClick(TimeMeal item) {
-                                showEditQuantityDialog(item);
-                            }
-                        });
-                        recyclerMealTime.setAdapter(adapter);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<List<ApiService.MealResponse>>> call, Throwable t) {
-                        // Safe fallback using empty list
-                        List<TimeMeal> timeline = new ArrayList<>();
-                        for (int hour = 9; hour <= 21; hour++) {
-                            String time = (hour < 10) ? "0" + hour + ":00" : hour + ":00";
-                            timeline.add(new TimeMeal(selectedDayIndex, time));
-                        }
-                        MealTimeAdapter adapter = new MealTimeAdapter(timeline, new MealTimeAdapter.OnMealClickListener() {
-                            @Override
-                            public void onAddClick(String time) {
-                                selectedTime = time;
-                                showFoodBottomSheet();
-                            }
-
-                            @Override
-                            public void onDeleteClick(TimeMeal item) {}
-
-                            @Override
-                            public void onEditClick(TimeMeal item) {}
-                        });
-                        recyclerMealTime.setAdapter(adapter);
-                    }
-                });
+        binding.recyclerMealTime.setLayoutManager(new LinearLayoutManager(this));
+        presenter.loadTimeline(this, selectedDayIndex);
     }
 
-    private void deleteMeal(String mealId) {
-        if (mealId == null) return;
-        ApiClient.getService(this).deleteMeal(mealId)
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(MealPlannerActivity.this, "Đã xóa món ăn!", Toast.LENGTH_SHORT).show();
-                            setupRecycler();
-                        } else {
-                            Toast.makeText(MealPlannerActivity.this, "Lỗi khi xóa món ăn", Toast.LENGTH_SHORT).show();
-                        }
-                    }
+    @Override
+    public void showLoading() {
+        // Can show a small loader if needed, or loading progress bar
+    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(MealPlannerActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+    @Override
+    public void hideLoading() {
+        // Hide loader
+    }
+
+    @Override
+    public void onTimelineLoaded(List<TimeMeal> timeline) {
+        MealTimeAdapter adapter = new MealTimeAdapter(timeline, new MealTimeAdapter.OnMealClickListener() {
+            @Override
+            public void onAddClick(String time) {
+                selectedTime = time;
+                showFoodBottomSheet();
+            }
+
+            @Override
+            public void onDeleteClick(TimeMeal item) {
+                presenter.deleteMeal(MealPlannerActivity.this, item.getMealId());
+            }
+
+            @Override
+            public void onEditClick(TimeMeal item) {
+                showEditQuantityDialog(item);
+            }
+        });
+        binding.recyclerMealTime.setAdapter(adapter);
+    }
+
+    @Override
+    public void onTimelineFailed(String message) {
+        Toast.makeText(this, "Không thể nạp lịch ăn: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMealDeletedSuccessfully() {
+        Toast.makeText(this, "Đã xóa món ăn!", Toast.LENGTH_SHORT).show();
+        setupRecycler();
+    }
+
+    @Override
+    public void onMealDeleteFailed(String message) {
+        Toast.makeText(this, "Lỗi khi xóa món ăn: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMealUpdatedSuccessfully() {
+        Toast.makeText(this, "Thành công!", Toast.LENGTH_SHORT).show();
+        setupRecycler();
+    }
+
+    @Override
+    public void onMealUpdateFailed(String message) {
+        Toast.makeText(this, "Lỗi: " + message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showFoodBottomSheet() {
+        String dateStr = presenter.getDateOfIndex(selectedDayIndex);
+        searchDialog = new FoodSearchBottomSheetDialog(this, dateStr, this);
+        searchDialog.show();
+    }
+
+    @Override
+    public void onFoodSelected(FoodItem foodItem) {
+        String dateStr = presenter.getDateOfIndex(selectedDayIndex);
+        String scheduledAt = dateStr + "T" + selectedTime + ":00.000Z";
+        
+        if (searchDialog != null && searchDialog.isShowing()) {
+            searchDialog.dismiss();
+        }
+
+        presenter.addMeal(this, foodItem.getId(), scheduledAt, 100);
+    }
+
+    @Override
+    public void onRecommendClick() {
+        Intent intent = new Intent(MealPlannerActivity.this, SurveyCuisineActivity.class);
+        intent.putExtra("selected_time", selectedTime);
+        intent.putExtra("selected_day", selectedDayIndex);
+        startActivity(intent);
     }
 
     private void showEditQuantityDialog(TimeMeal item) {
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Cập nhật số lượng");
 
         final EditText input = new EditText(this);
@@ -297,7 +205,7 @@ public class MealPlannerActivity extends AppCompatActivity {
                         Toast.makeText(this, "Số lượng phải lớn hơn 0", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    updateMealQuantity(item.getMealId(), quantity);
+                    presenter.updateMealQuantity(MealPlannerActivity.this, item.getMealId(), quantity);
                 } catch (NumberFormatException e) {
                     Toast.makeText(this, "Số lượng không hợp lệ", Toast.LENGTH_SHORT).show();
                 }
@@ -308,31 +216,8 @@ public class MealPlannerActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void updateMealQuantity(String mealId, int quantity) {
-        if (mealId == null) return;
-        ApiService.UpdateMealRequest req = new ApiService.UpdateMealRequest(null, quantity);
-        ApiClient.getService(this).updateMeal(mealId, req)
-                .enqueue(new Callback<ApiService.ApiResponse<ApiService.MealResponse>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Response<ApiService.ApiResponse<ApiService.MealResponse>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            Toast.makeText(MealPlannerActivity.this, "Cập nhật số lượng thành công!", Toast.LENGTH_SHORT).show();
-                            setupRecycler();
-                        } else {
-                            Toast.makeText(MealPlannerActivity.this, "Lỗi khi cập nhật", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Throwable t) {
-                        Toast.makeText(MealPlannerActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-
     private void setupBottomNav() {
-        btnHome.setOnClickListener(v -> {
+        binding.btnHome.setOnClickListener(v -> {
             Intent intent = new Intent(MealPlannerActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
@@ -340,115 +225,9 @@ public class MealPlannerActivity extends AppCompatActivity {
     }
 
     private void setupClicks() {
-        btnMenu.setOnClickListener(v -> {
+        binding.btnMenu.setOnClickListener(v -> {
             Intent intent = new Intent(MealPlannerActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
-    }
-
-    private void showFoodBottomSheet() {
-        BottomSheetDialog dialog = new BottomSheetDialog(this);
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_food, null);
-        dialog.setContentView(view);
-
-        RecyclerView recyclerSearchFood = view.findViewById(R.id.recyclerSearchFood);
-        Button btnRecommend = view.findViewById(R.id.btnRecommend);
-        EditText edtSearch = view.findViewById(R.id.edtSearch);
-
-        recyclerSearchFood.setLayoutManager(new LinearLayoutManager(this));
-
-        // Initial state: Load smart recommendations
-        loadRecommendations(recyclerSearchFood, dialog);
-
-        // Dynamic typing search using a TextWatcher
-        edtSearch.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String query = s.toString().trim();
-                if (!query.isEmpty()) {
-                    searchFoods(query, recyclerSearchFood, dialog);
-                } else {
-                    loadRecommendations(recyclerSearchFood, dialog);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(android.text.Editable s) {}
-        });
-
-        btnRecommend.setOnClickListener(v -> {
-            dialog.dismiss();
-            Intent intent = new Intent(MealPlannerActivity.this, SurveyCuisineActivity.class);
-            intent.putExtra("selected_time", selectedTime);
-            intent.putExtra("selected_day", selectedDayIndex);
-            startActivity(intent);
-        });
-
-        dialog.show();
-    }
-
-    private void searchFoods(String query, RecyclerView recyclerView, BottomSheetDialog dialog) {
-        ApiClient.getService(this).searchFoods(query, 1, 20)
-                .enqueue(new Callback<ApiService.ApiResponse<List<FoodItem>>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<List<FoodItem>>> call, Response<ApiService.ApiResponse<List<FoodItem>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            List<FoodItem> foods = response.body().getData();
-                            updateBottomSheetRecycler(foods, recyclerView, dialog);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<List<FoodItem>>> call, Throwable t) {}
-                });
-    }
-
-    private void loadRecommendations(RecyclerView recyclerView, BottomSheetDialog dialog) {
-        String dateStr = getDateOfIndex(selectedDayIndex);
-        ApiClient.getService(this).getRecommendations(dateStr, null)
-                .enqueue(new Callback<ApiService.ApiResponse<List<FoodItem>>>() {
-                    @Override
-                    public void onResponse(Call<ApiService.ApiResponse<List<FoodItem>>> call, Response<ApiService.ApiResponse<List<FoodItem>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
-                            List<FoodItem> foods = response.body().getData();
-                            updateBottomSheetRecycler(foods, recyclerView, dialog);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ApiService.ApiResponse<List<FoodItem>>> call, Throwable t) {}
-                });
-    }
-
-    private void updateBottomSheetRecycler(List<FoodItem> foods, RecyclerView recyclerView, BottomSheetDialog dialog) {
-        FoodAdapter adapter = new FoodAdapter(foods, foodItem -> {
-            String dateStr = getDateOfIndex(selectedDayIndex);
-            String scheduledAt = dateStr + "T" + selectedTime + ":00.000Z";
-
-            // Add meal to backend API
-            ApiClient.getService(MealPlannerActivity.this)
-                    .addMeal(new ApiService.AddMealRequest(foodItem.getId(), scheduledAt, 100))
-                    .enqueue(new Callback<ApiService.ApiResponse<ApiService.MealResponse>>() {
-                        @Override
-                        public void onResponse(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Response<ApiService.ApiResponse<ApiService.MealResponse>> response) {
-                            if (response.isSuccessful()) {
-                                Toast.makeText(MealPlannerActivity.this, "Đã thêm món ăn!", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                                setupRecycler();
-                            } else {
-                                Toast.makeText(MealPlannerActivity.this, "Lỗi khi thêm món ăn", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Throwable t) {
-                            Toast.makeText(MealPlannerActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        });
-        recyclerView.setAdapter(adapter);
     }
 }
