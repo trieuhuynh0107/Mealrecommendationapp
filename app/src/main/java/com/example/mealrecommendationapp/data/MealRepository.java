@@ -217,4 +217,34 @@ public class MealRepository {
                     }
                 });
     }
+
+    public void getFoodDetail(Context context, String foodId, RepositoryCallback<FoodItem> callback) {
+        ApiClient.getService(context).getFoodDetail(foodId)
+                .enqueue(new Callback<ApiService.ApiResponse<FoodItem>>() {
+                    @Override
+                    public void onResponse(Call<ApiService.ApiResponse<FoodItem>> call,
+                                           Response<ApiService.ApiResponse<FoodItem>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            ApiService.ApiResponse<FoodItem> body = response.body();
+                            if (body.isSuccess()) {
+                                callback.onSuccess(body.getData());
+                            } else {
+                                String errorMsg = "Lỗi khi tải chi tiết món ăn";
+                                if (body.getError() != null && body.getError().getMessage() != null) {
+                                    errorMsg = body.getError().getMessage();
+                                }
+                                callback.onError(errorMsg);
+                            }
+                        } else {
+                            callback.onError("Lỗi máy chủ: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiService.ApiResponse<FoodItem>> call, Throwable t) {
+                        callback.onError("Lỗi mạng: " + t.getMessage());
+                    }
+                });
+    }
 }
+

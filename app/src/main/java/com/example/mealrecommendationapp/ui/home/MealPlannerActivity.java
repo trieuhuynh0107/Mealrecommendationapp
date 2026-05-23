@@ -175,7 +175,11 @@ public class MealPlannerActivity extends AppCompatActivity implements MealPlanne
             searchDialog.dismiss();
         }
 
-        presenter.addMeal(this, foodItem.getId(), scheduledAt, 100);
+        Intent intent = new Intent(MealPlannerActivity.this, FoodDetailActivity.class);
+        intent.putExtra("food_id", foodItem.getId());
+        intent.putExtra("food_item", foodItem);
+        intent.putExtra("scheduled_at", scheduledAt);
+        startActivity(intent);
     }
 
     @Override

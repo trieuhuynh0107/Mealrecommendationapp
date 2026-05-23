@@ -1,8 +1,9 @@
 package com.example.mealrecommendationapp.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 
-public class FoodItem {
+public class FoodItem implements Serializable {
 
     private String id;
     private String name;
@@ -15,6 +16,14 @@ public class FoodItem {
 
     @SerializedName("image_url")
     private String imageUrl;
+
+    @SerializedName("name_vi")
+    private String nameVi;
+
+    private String ingredients;
+    private double fiber;
+    private double sugar;
+    private double sodium;
 
     public FoodItem(
             String name,
@@ -83,4 +92,44 @@ public class FoodItem {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
-}
+
+    public String getNameVi() {
+        return nameVi;
+    }
+
+    public void setNameVi(String nameVi) {
+        this.nameVi = nameVi;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public double getFiber() {
+        return fiber;
+    }
+
+    public void setFiber(double fiber) {
+        this.fiber = fiber;
+    }
+
+    public double getSugar() {
+        return sugar;
+    }
+
+    public void setSugar(double sugar) {
+        this.sugar = sugar;
+    }
+
+    public double getSodium() {
+        return sodium;
+    }
+
+    public void setSodium(double sodium) {
+        this.sodium = sodium;
+    }
+}

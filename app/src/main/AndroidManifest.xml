@@ -82,6 +82,11 @@
         <activity
             android:name=".ui.home.ProfileActivity"/>
 
+        <activity
+            android:name=".ui.home.FoodDetailActivity"
+            android:exported="false"/>
+
     </application>
+
 
 </manifest>

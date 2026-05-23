@@ -88,10 +88,14 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     public void onMealsLoaded(List<FoodItem> meals) {
         binding.recyclerFood.setLayoutManager(new LinearLayoutManager(this));
         FoodAdapter adapter = new FoodAdapter(meals, foodItem -> {
-            // Food click actions if any
+            Intent intent = new Intent(HomeActivity.this, FoodDetailActivity.class);
+            intent.putExtra("food_id", foodItem.getId());
+            intent.putExtra("food_item", foodItem);
+            startActivity(intent);
         });
         binding.recyclerFood.setAdapter(adapter);
     }
+
 
     @Override
     public void onMealsFailed(String errorMessage) {

@@ -53,7 +53,7 @@ public class HomePresenter {
                 List<FoodItem> foodList = new ArrayList<>();
                 for (ApiService.MealResponse meal : meals) {
                     FoodItem item = new FoodItem(
-                            meal.getId(),
+                            meal.getFoodId(),
                             meal.getFoodName(),
                             (int) meal.getCaloriesSnap(),
                             (int) meal.getProteinSnap(),

@@ -48,6 +48,12 @@ public interface ApiService {
             @Query("limit") int limit
     );
 
+    @GET("/foods/{id}")
+    Call<ApiResponse<FoodItem>> getFoodDetail(
+            @Path("id") String foodId
+    );
+
+
     // ==================== MEALS ====================
 
     @GET("/meals")

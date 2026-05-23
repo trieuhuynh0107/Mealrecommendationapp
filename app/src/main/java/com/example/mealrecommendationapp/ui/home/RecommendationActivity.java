@@ -89,30 +89,11 @@ public class RecommendationActivity extends AppCompatActivity {
                         
                         FoodAdapter adapter = new FoodAdapter(foods, foodItem -> {
                             String scheduledAt = dateStr + "T" + selectedTime + ":00.000Z";
-
-                            // Add meal to backend API
-                            ApiClient.getService(RecommendationActivity.this)
-                                    .addMeal(new ApiService.AddMealRequest(foodItem.getId(), scheduledAt, 100))
-                                    .enqueue(new Callback<ApiService.ApiResponse<ApiService.MealResponse>>() {
-                                        @Override
-                                        public void onResponse(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Response<ApiService.ApiResponse<ApiService.MealResponse>> response) {
-                                            if (response.isSuccessful()) {
-                                                Toast.makeText(RecommendationActivity.this, "Đã thêm món ăn!", Toast.LENGTH_SHORT).show();
-                                                
-                                                Intent intent = new Intent(RecommendationActivity.this, MealPlannerActivity.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                startActivity(intent);
-                                                finish();
-                                            } else {
-                                                Toast.makeText(RecommendationActivity.this, "Lỗi khi thêm món ăn vào lịch", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ApiService.ApiResponse<ApiService.MealResponse>> call, Throwable t) {
-                                            Toast.makeText(RecommendationActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                            Intent intent = new Intent(RecommendationActivity.this, FoodDetailActivity.class);
+                            intent.putExtra("food_id", foodItem.getId());
+                            intent.putExtra("food_item", foodItem);
+                            intent.putExtra("scheduled_at", scheduledAt);
+                            startActivity(intent);
                         });
                         recyclerRecommended.setAdapter(adapter);
                     }
